@@ -17,6 +17,8 @@ RUN apk update \
 
 COPY . .
 
+RUN python manage.py collectstatic --noinput
+
 RUN adduser -D runuser
 USER runuser
 
