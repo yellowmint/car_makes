@@ -7,7 +7,7 @@ VEHICLE_API_URL = 'https://vpic.nhtsa.dot.gov'
 
 
 class CarSerializer(serializers.ModelSerializer):
-    average_rate = serializers.FloatField()
+    average_rate = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Car
