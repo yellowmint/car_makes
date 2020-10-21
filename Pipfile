@@ -11,6 +11,7 @@ gunicorn = "*"
 dj-database-url = "*"
 whitenoise = "*"
 requests = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 

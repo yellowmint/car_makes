@@ -28,6 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default='fake-secret-key')
 DEBUG = int(os.environ.get('DEBUG', default=1))
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'car-makes.herokuapp.com']
+INTERNAL_IPS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -41,11 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
