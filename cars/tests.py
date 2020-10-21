@@ -16,6 +16,16 @@ class CarViewTests(TestCase):
         want = {'non_field_errors': ['given make and model not exist in reality and cannot be saved']}
         self.assertEqual(resp.json(), want)
 
+    def test_create_prevent_duplications(self):
+        resp = self.client.post(reverse('car-list'), {'make_name': 'opel', 'model_name': 'ampera'})
+        self.assertEqual(resp.status_code, 201)
+
+        resp = self.client.post(reverse('car-list'), {'make_name': 'opel', 'model_name': 'ampera'})
+        self.assertEqual(resp.status_code, 400)
+
+        want = {'non_field_errors': ['The fields make_name, model_name must make a unique set.']}
+        self.assertEqual(resp.json(), want)
+
     def test_create_invalid_params(self):
         resp = self.client.post(reverse('car-list'), {'wrong-key': 'foo', 'model_name': 'a' * 251})
         self.assertEqual(resp.status_code, 400)
