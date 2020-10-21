@@ -9,4 +9,4 @@ class Car(models.Model):
 
 class Rate(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
-    value = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+    value = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
