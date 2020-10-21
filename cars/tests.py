@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.reverse import reverse
 
-from cars.models import Car
+from cars.models import Car, Rate
 
 
 class CarViewTests(TestCase):
@@ -24,6 +24,52 @@ class CarViewTests(TestCase):
             'make_name': ['This field is required.'],
             'model_name': ['Ensure this field has no more than 250 characters.']
         }
+        self.assertEqual(resp.json(), want)
+
+    def test_list_empty(self):
+        resp = self.client.get(reverse('car-list'))
+        self.assertEqual(resp.json(), [])
+
+    def test_list_filled(self):
+        fiat = Car.objects.create(make_name='fiat', model_name='brava')
+        opel = Car.objects.create(make_name='opel', model_name='ampera')
+        Rate.objects.create(car=opel, value=4)
+        Rate.objects.create(car=opel, value=5)
+
+        resp = self.client.get(reverse('car-list'))
+        want = [
+            {'id': opel.id, 'make_name': 'opel', 'model_name': 'ampera', 'average_rate': 4.5, 'rates_count': 2},
+            {'id': fiat.id, 'make_name': 'fiat', 'model_name': 'brava', 'average_rate': None, 'rates_count': 0}
+        ]
+        self.assertEqual(resp.json(), want)
+
+
+class PopularViewTests(TestCase):
+    def test_list_empty(self):
+        resp = self.client.get(reverse('popular-list'))
+        self.assertEqual(resp.json(), [])
+
+    def test_list_filled(self):
+        fiat = Car.objects.create(make_name='fiat', model_name='brava')
+        Rate.objects.create(car=fiat, value=3)
+
+        opel = Car.objects.create(make_name='opel', model_name='ampera')
+        Rate.objects.create(car=opel, value=3)
+        Rate.objects.create(car=opel, value=4)
+        Rate.objects.create(car=opel, value=4)
+
+        volvo = Car.objects.create(make_name='volvo', model_name='v60')
+        Rate.objects.create(car=volvo, value=4)
+        Rate.objects.create(car=volvo, value=5)
+
+        Car.objects.create(make_name='audi', model_name='a4')
+
+        resp = self.client.get(reverse('popular-list'))
+        want = [
+            {'id': opel.id, 'make_name': 'opel', 'model_name': 'ampera', 'average_rate': 3.67, 'rates_count': 3},
+            {'id': volvo.id, 'make_name': 'volvo', 'model_name': 'v60', 'average_rate': 4.5, 'rates_count': 2},
+            {'id': fiat.id, 'make_name': 'fiat', 'model_name': 'brava', 'average_rate': 3.0, 'rates_count': 1},
+        ]
         self.assertEqual(resp.json(), want)
 
 

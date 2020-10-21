@@ -7,11 +7,12 @@ VEHICLE_API_URL = 'https://vpic.nhtsa.dot.gov'
 
 
 class CarSerializer(serializers.ModelSerializer):
-    average_rate = serializers.FloatField()
+    average_rate = serializers.FloatField(read_only=True)
+    rates_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Car
-        fields = ['id', 'make_name', 'model_name', 'average_rate']
+        fields = ['id', 'make_name', 'model_name', 'average_rate', 'rates_count']
 
     def validate(self, attrs):
         resp = requests.get(f'{VEHICLE_API_URL}/api/vehicles/getmodelsformake/{attrs["make_name"]}?format=json')
