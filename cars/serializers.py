@@ -1,7 +1,7 @@
 import requests
 from rest_framework import serializers
 
-from cars.models import Car
+from cars.models import Car, Rate
 
 VEHICLE_API_URL = 'https://vpic.nhtsa.dot.gov'
 
@@ -23,3 +23,9 @@ class CarSerializer(serializers.ModelSerializer):
                 return attrs
 
         raise serializers.ValidationError('given make and model not exist in reality and cannot be saved')
+
+
+class RateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rate
+        fields = ['car', 'value']

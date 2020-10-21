@@ -5,6 +5,7 @@ from cars import views
 
 router = DefaultRouter()
 router.register(r'cars', views.CarViewSet)
+router.register(r'rate', views.RateViewSet, basename='rate')
 
 urlpatterns = [
     path('', include(router.urls)),
