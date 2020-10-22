@@ -5,13 +5,13 @@ name = "pypi"
 
 [packages]
 django = "*"
-psycopg2 = "*"
 djangorestframework = "*"
 gunicorn = "*"
 dj-database-url = "*"
 whitenoise = "*"
 requests = "*"
 django-debug-toolbar = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
